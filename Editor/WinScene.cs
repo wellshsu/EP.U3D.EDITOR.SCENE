@@ -1,4 +1,4 @@
-﻿//---------------------------------------------------------------------//
+//---------------------------------------------------------------------//
 //                    GNU GENERAL PUBLIC LICENSE                       //
 //                       Version 2, June 1991                          //
 //                                                                     //
@@ -24,6 +24,7 @@ namespace EP.U3D.EDITOR.SCENE
         {
             GetWindowWithRect(WindowType, WindowRect, WindowUtility, WindowTitle);
         }
+        private static string LATEST_SEARCH_SCENE = Path.GetFullPath("./") + "LATEST_SEARCH_SCENE";
         public static Type WindowType = typeof(WinScene);
         public static Rect WindowRect = new Rect(30, 30, 285, 450);
         public static bool WindowUtility = false;
@@ -40,6 +41,7 @@ namespace EP.U3D.EDITOR.SCENE
         {
             workspace = Constants.BUNDLE_SCENE_WORKSPACE;
             Instance = this;
+            searchStr = EditorPrefs.GetString(LATEST_SEARCH_SCENE);
             Refresh();
             Selection.selectionChanged += OnSelectChange;
         }
@@ -74,7 +76,10 @@ namespace EP.U3D.EDITOR.SCENE
             if (paths.Count > 0 && assets.Count > 0)
             {
                 Helper.BeginContents();
+                var lSearchStr = searchStr;
                 searchStr = Helper.SearchField(searchStr, GUILayout.Height(20));
+                if (lSearchStr != searchStr) EditorPrefs.SetString(LATEST_SEARCH_SCENE, searchStr);
+
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Item", GUILayout.Width(200));
                 GUILayout.Label("Operate");
